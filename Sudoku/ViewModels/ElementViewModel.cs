@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sudoku.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -9,43 +10,43 @@ namespace Sudoku.ViewModels
 {
     public class ElementViewModel : INotifyPropertyChanged
     {
-        private string _Color;
+        private string _color;
         public string Color
         {
-            get { return _Color; }
+            get => _color;
             set
             {
-                if (_Color != value)
+                if (_color != value)
                 {
-                    _Color = value;
+                    _color = value;
                     OnPropertyChanged(nameof(Color));
                 }
             }
         }
 
-        private string _Value;
+        private string _value;
         public string Value
         {
-            get { return _Value; }
+            get => _value;
             set
             {
-                if (_Value != value)
+                if (_value != value)
                 {
-                    _Value = value;
+                    _value = value;
                     OnPropertyChanged(nameof(Value));
                 }
             }
         }
 
-        private bool _Locked;
+        private bool _locked;
         public bool Locked
         {
-            get { return _Locked; }
+            get => _locked;
             set
             {
-                if (_Locked != value)
+                if (_locked != value)
                 {
-                    _Locked = value;
+                    _locked = value;
                     OnPropertyChanged(nameof(Locked));
                 }
             }
@@ -64,7 +65,7 @@ namespace Sudoku.ViewModels
 
         public char AsChar()
         {
-            return Value.Length > 0 ? Value[0] : 'X';
+            return Value.Length > 0 ? Value[0] : SudokuGrid.EmptyValue;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

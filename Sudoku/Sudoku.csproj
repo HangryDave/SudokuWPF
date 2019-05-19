@@ -102,7 +102,6 @@
       <DependentUpon>RowView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\SudokuGrid.cs" />
-    <Compile Include="Models\SudokuRegion.cs" />
     <Compile Include="ViewModels\ElementViewModel.cs" />
     <Compile Include="ViewModels\SudokuGridViewModel.cs" />
     <Page Include="MainWindow.xaml">

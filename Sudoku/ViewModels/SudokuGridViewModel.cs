@@ -10,19 +10,17 @@ namespace Sudoku.ViewModels
 {
     public class SudokuGridViewModel : INotifyPropertyChanged
     {
-        private SudokuGrid Grid;
         public ObservableCollection<ObservableCollection<ElementViewModel>> Elements { get; set; }
-        public ObservableCollection<string> AllowedElementsColors { get; set; }
 
-        private string _Status;
+        private string _status;
         public string Status
         {
-            get { return _Status; }
+            get => _status;
             set
             {
-                if (_Status != value)
+                if (_status != value)
                 {
-                    _Status = value;
+                    _status = value;
                     OnPropertyChanged(nameof(Status));
                 }
             }
@@ -31,7 +29,7 @@ namespace Sudoku.ViewModels
         private string _ValidNumberVisibility;
         public string ValidNumberVisibility
         {
-            get { return _ValidNumberVisibility; }
+            get => _ValidNumberVisibility;
             set
             {
                 if(_ValidNumberVisibility != value)
@@ -42,17 +40,40 @@ namespace Sudoku.ViewModels
             }
         }
 
-        private bool IsValidPuzzle = true;
-        private bool IsPuzzleLoaded = false;
-        private int SelectedX;
-        private int SelectedY;
+        private const string ValidColor = "White";
+        private const string InvalidColor = "Salmon";
+        private const string SelectedColor = "Yellow";
+        private const string HighlightedColor = "Gray";
+        private const string LockedColor = "LightGray";
+        
+        public ObservableCollection<string> AllowedElementsColors { get; set; }
+
+        private bool _isValidPuzzle = true;
+        private bool _isPuzzleLoaded = false;
+        private int _selectedX = -1;
+        private int _selectedY = -1;
+        
+        private readonly SudokuGrid _grid;
 
         public SudokuGridViewModel()
         {
             Elements = new ObservableCollection<ObservableCollection<ElementViewModel>>();
             AllowedElementsColors = new ObservableCollection<string>();
+            _grid = new SudokuGrid();
+            
+            for (int y = 0; y < 9; y++)
+            {
+                AllowedElementsColors.Add(ValidColor);
+                
+                Elements.Add(new ObservableCollection<ElementViewModel>());
+                Elements[y].CollectionChanged += Elements_CollectionChanged;
+                for (int x = 0; x < 9; x++)
+                {
+                    Elements[y].Add(new ElementViewModel(SudokuGrid.EmptyValue.ToString(), x, y, ValidColor));
+                    Elements[y][x].PropertyChanged += ElementViewModel_PropertyChanged;
+                }
+            }
 
-            Grid = new SudokuGrid();
             Reset();
         }
 
@@ -63,33 +84,33 @@ namespace Sudoku.ViewModels
 
         public void Solve()
         {
-            Grid.Solve();
+            _grid.Solve();
             var allElementViewModels = Elements.SelectMany(e => e);
             foreach (var elementViewModel in allElementViewModels)
             {
-                var element = Grid.GetElement(elementViewModel.X, elementViewModel.Y);
+                var element = _grid.GetElement(elementViewModel.X, elementViewModel.Y);
                 elementViewModel.Value = element.Value == 'X' ? "" : element.Value + "";
             }
         }
 
         public void OpenPuzzle(string data)
         {
-            IsValidPuzzle = Grid.OpenPuzzle(data);
+            _isValidPuzzle = _grid.OpenPuzzle(data);
 
-            IsPuzzleLoaded = false;
+            _isPuzzleLoaded = false;
 
-            Status = IsValidPuzzle ? "In progress." : "Invalid puzzle!";
+            Status = _isValidPuzzle ? "In progress." : "Invalid puzzle!";
             ValidNumberVisibility = "Hidden";
 
             Initialize();
 
-            Status = Grid.IsSolved() ? "Solved!" : Status;
+            Status = _grid.IsSolved() ? "Solved!" : Status;
 
-            IsPuzzleLoaded = true;
-            if (IsValidPuzzle)
+            _isPuzzleLoaded = true;
+            if (_isValidPuzzle)
             {
-                SelectedX = -1;
-                SelectedY = -1;
+                _selectedX = -1;
+                _selectedY = -1;
                 UpdateElementColors();
             }
         }
@@ -98,32 +119,19 @@ namespace Sudoku.ViewModels
         {
             for (int y = 0; y < 9; y++)
             {
-                if (Elements.Count < 9)
-                {
-                    Elements.Add(new ObservableCollection<ElementViewModel>());
-                    Elements[y].CollectionChanged += Elements_CollectionChanged;
-                    AllowedElementsColors.Add("White");
-                }
-
-                AllowedElementsColors[y] = "White";
+                AllowedElementsColors[y] = ValidColor;
                 for (int x = 0; x < 9; x++)
                 {
-                    SudokuElement element = Grid.GetElement(x, y);
-                    string value = element.Value.ToString().Equals("X") ? "" : element.Value.ToString();
-                    string color = "White";
+                    SudokuElement element = _grid.GetElement(x, y);
+                    string value = element.Value.Equals(SudokuGrid.EmptyValue) ? "" : element.Value.ToString();
+                    string color = ValidColor;
 
-                    bool locked = !IsValidPuzzle;
+                    bool locked = !_isValidPuzzle;
 
                     if (value.Length > 0)
                     {
                         locked = true;
-                        color = element.Valid ? "LightGray" : "Salmon";
-                    }
-
-                    if (Elements[y].Count < 9)
-                    {
-                        Elements[y].Add(new ElementViewModel(value, x, y, color));
-                        Elements[y][x].PropertyChanged += ElementViewModel_PropertyChanged;
+                        color = element.IsValid ? LockedColor : InvalidColor;
                     }
 
                     ElementViewModel elementViewModel = Elements[y][x];
@@ -132,8 +140,6 @@ namespace Sudoku.ViewModels
                     elementViewModel.Locked = locked;
                 }
             }
-
-
         }
 
         private void Elements_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -153,17 +159,17 @@ namespace Sudoku.ViewModels
             int y = element.Y;
             string text = element.Value;
             
-            if(!element.Locked)
+            if (!element.Locked)
                 SetElement(x, y, text);
 
-            if (IsValidPuzzle)
+            if (_isValidPuzzle)
             {
-                if (IsPuzzleLoaded)
+                if (_isPuzzleLoaded)
                 {
                     UpdateElementColors();
                     UpdateAllowedNumbers(x, y);
 
-                    if (Grid.IsSolved())
+                    if (_grid.IsSolved())
                         Status = "Solved!";
                     else
                         Status = "In progress.";
@@ -171,19 +177,19 @@ namespace Sudoku.ViewModels
             }
         }
 
-        public bool IsElementValid(int x, int y, ElementViewModel element)
+        public bool IsElementValid(ElementViewModel element)
         {
-            return Grid.IsElementValid(x, y, element.AsChar());
+            return _grid.IsValuePossible(element.AsChar(), element.X, element.Y);
         }
 
         public void SelectElement(int x, int y)
         {
-            if (IsValidPuzzle)
+            if (_isValidPuzzle)
             {
                 ValidNumberVisibility = "Visible";
 
-                SelectedX = x;
-                SelectedY = y;
+                _selectedX = x;
+                _selectedY = y;
 
                 UpdateElementColors();
                 UpdateAllowedNumbers(x, y);
@@ -196,23 +202,23 @@ namespace Sudoku.ViewModels
             {
                 for(int x = 0; x < Elements[y].Count; x++)
                 {
-                    ElementViewModel element = Elements[y][x];
-                    bool isAllowed = IsElementValid(x, y, element);
+                    var element = Elements[y][x];
+                    var isAllowed = IsElementValid(element);
 
                     string color;
-                    if ((x == SelectedX || y == SelectedY) && isAllowed)
+                    if ((x == _selectedX || y == _selectedY) && isAllowed)
                     {
-                        color = "Yellow";
+                        color = SelectedColor;
                     }
                     else
                     {
                         if (!element.Locked)
                         {
-                            color = isAllowed ? "White" : "Salmon";
+                            color = isAllowed ? ValidColor : InvalidColor;
                         }
                         else
                         {
-                            color = "LightGray";
+                            color = LockedColor;
                         }
                     }
                     element.Color = color;
@@ -224,44 +230,44 @@ namespace Sudoku.ViewModels
         {
             for (int i = 0; i < 9; i++)
             {
-                char c = (i + 1).ToString()[0];
-                char[] column = Grid.GetColumn(x);
-                char[] row = Grid.GetRow(y);
-                char[] region = Grid.GetRegion(x, y);
+                var num = (i + 1).ToString()[0];
+                var column = _grid.GetColumn(x);
+                var row = _grid.GetRow(y);
+                var region = _grid.GetRegion(x, y);
 
-                bool valid = !column.Contains(c) &&
-                                !row.Contains(c) &&
-                                !region.Contains(c);
+                var valid = !column.Contains(num) &&
+                                !row.Contains(num) &&
+                                !region.Contains(num);
 
-                char value = Elements[y][x].AsChar();
+                var value = Elements[y][x].AsChar();
 
                 string color;
                 if (valid)
                 {
-                    color = "White";
+                    color = ValidColor;
                 }
-                else if(value.Equals(c))
+                else if(value.Equals(num))
                 {
-                    color = "Salmon";
+                    color = InvalidColor;
                 }
                 else
                 {
-                    color = "Gray";
+                    color = HighlightedColor;
                 }
                 AllowedElementsColors[i] = color;
             }
         }
 
-        public void SetElement(int x, int y, string s)
+        private void SetElement(int x, int y, string s)
         {
-            char c = s.Length > 0 ? s[0] : 'X';
+            var c = s.Length > 0 ? s[0] : SudokuGrid.EmptyValue;
             
-            Grid.SetElement(x, y, c);
+            _grid.SetElement(x, y, c);
         }
 
         public override string ToString()
         {
-            return Grid.ToString();
+            return _grid.ToString();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

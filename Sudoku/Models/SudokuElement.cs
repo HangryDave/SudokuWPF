@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sudoku.Models
+﻿namespace Sudoku.Models
 {
     public class SudokuElement
     {
@@ -12,7 +6,7 @@ namespace Sudoku.Models
         public int Y { get; }
         public int Region { get; }
         public char Value { get; set; }
-        public bool Valid { get; set; }
+        public bool IsValid { get; set; }
 
         public SudokuElement(int x, int y, int region, char value)
         {
@@ -20,7 +14,7 @@ namespace Sudoku.Models
             Y = y;
             Region = region;
             Value = value;
-            Valid = true;
+            IsValid = true;
         }
     }
 }
