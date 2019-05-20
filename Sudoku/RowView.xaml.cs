@@ -1,16 +1,9 @@
 ﻿using Sudoku.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
+using Sudoku.Models;
 
 namespace Sudoku
 {
@@ -18,10 +11,7 @@ namespace Sudoku
     {
         public static readonly DependencyProperty RowIndexProperty = DependencyProperty.Register("RowIndex", typeof(int), typeof(Row), new PropertyMetadata(-1, OnRowIndexChanged));
 
-        public SudokuGridViewModel ViewModel
-        {
-            get { return ((SudokuGridViewModel)DataContext); }
-        }
+        private SudokuGridViewModel ViewModel => ((SudokuGridViewModel)DataContext);
 
         public static void OnRowIndexChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
@@ -30,7 +20,7 @@ namespace Sudoku
 
         public int RowIndex
         {
-            get { return int.Parse(GetValue(RowIndexProperty).ToString()); }
+            get => int.Parse(GetValue(RowIndexProperty).ToString());
             set
             {
                 SetValue(RowIndexProperty, int.Parse(value.ToString()));
@@ -47,45 +37,53 @@ namespace Sudoku
         {
             for (int i = 0; i < 9; i++)
             {
-                TextBox textBox = (TextBox)FindName("element_" + i);
+                var textBox = (TextBox)FindName("Element" + i);
+                var element = $"Elements[{RowIndex}][{i}]";
 
-                Binding valueBinding = new Binding();
-                valueBinding.Path = new PropertyPath($"Elements[{RowIndex}][{i}].Value");
-                valueBinding.Mode = BindingMode.TwoWay;
-                valueBinding.Source = ViewModel;
-                valueBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-                BindingOperations.SetBinding((TextBox)FindName("element_" + i), TextBox.TextProperty, valueBinding);
+                var valueBinding = new Binding
+                {
+                    Path = new PropertyPath($"{element}.Value"),
+                    Mode = BindingMode.TwoWay,
+                    Source = ViewModel,
+                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+                };
+                BindingOperations.SetBinding(textBox, TextBox.TextProperty, valueBinding);
 
-                Binding backgroundBinding = new Binding();
-                backgroundBinding.Path = new PropertyPath($"Elements[{RowIndex}][{i}].Color");
-                backgroundBinding.Mode = BindingMode.OneWay;
-                backgroundBinding.Source = ViewModel;
-                backgroundBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-                BindingOperations.SetBinding((TextBox)FindName("element_" + i), TextBox.BackgroundProperty, backgroundBinding);
+                var backgroundBinding = new Binding
+                {
+                    Path = new PropertyPath($"{element}.Color"),
+                    Mode = BindingMode.OneWay,
+                    Source = ViewModel,
+                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+                };
+                BindingOperations.SetBinding(textBox, TextBox.BackgroundProperty, backgroundBinding);
 
-                Binding readOnlyBinding = new Binding();
-                readOnlyBinding.Path = new PropertyPath($"Elements[{RowIndex}][{i}].Locked");
-                readOnlyBinding.Mode = BindingMode.OneWay;
-                readOnlyBinding.Source = ViewModel;
-                readOnlyBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-                BindingOperations.SetBinding((TextBox)FindName("element_" + i), TextBox.IsReadOnlyProperty, readOnlyBinding);
+                var readOnlyBinding = new Binding
+                {
+                    Path = new PropertyPath($"{element}.Locked"),
+                    Mode = BindingMode.OneWay,
+                    Source = ViewModel,
+                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+                };
+                BindingOperations.SetBinding(textBox, TextBox.IsReadOnlyProperty, readOnlyBinding);
             }
         }
 
         private void TextBox_ValidateCharacter(object sender, TextCompositionEventArgs e)
         {
-            char c = e.Text[0];
-            e.Handled = !Char.IsDigit(c) || c.Equals('0');
+            var value = e.Text[0];
+            e.Handled = !char.IsDigit(value) || value.Equals('0');
         }
 
         private void TextBox_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            TextBox element = (TextBox)sender;
+            var element = (TextBox)sender;
 
-            int y = RowIndex;
-            int x = int.Parse(element.Name.ToCharArray()[8].ToString());
+            var x = int.Parse(element.Name.ToCharArray()[7].ToString());
+            var y = RowIndex;
+            var region = SudokuGrid.GetRegionNumber(x, y);
 
-            ViewModel.SelectElement(x, y);
+            ViewModel.SelectElement(x, y, region);
         }
 
         private void TextBox_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)

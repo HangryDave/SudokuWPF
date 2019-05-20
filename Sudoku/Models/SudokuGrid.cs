@@ -1,10 +1,8 @@
-﻿using Sudoku.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Sudoku.Models
 {
@@ -13,16 +11,16 @@ namespace Sudoku.Models
         public const char EmptyValue = 'X';
         private static readonly char[] PossibleValues = { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
-        private List<SudokuElement> Elements;
+        private List<SudokuElement> _elements;
 
         public SudokuGrid()
         {
-            Elements = Parse(null);
+            _elements = Parse(null);
         }
 
         public bool OpenPuzzle(string data)
         {
-            Elements = Parse(data);
+            _elements = Parse(data);
             return IsValidPuzzle();
         }
 
@@ -65,8 +63,8 @@ namespace Sudoku.Models
                 var row = rows[y];
                 for (int x = 0; x < 9; x++)
                 {
-                    int partition = (x / 3) + (y / 3) * 3;
-                    var element = new SudokuElement(x, y, partition, row[x]);
+                    var region = GetRegionNumber(x, y);
+                    var element = new SudokuElement(x, y, region, row[x]);
                     result.Add(element);
                 }
             }
@@ -74,23 +72,24 @@ namespace Sudoku.Models
             return result;
         }
 
-        public void Solve()
+        public bool Solve()
         {
-            var firstEmptyElement = Elements.FirstOrDefault(e => e.Value == EmptyValue);
+            var firstEmptyElement = _elements.FirstOrDefault(e => e.Value == EmptyValue);
             var solveUnitRecursive = Solve(firstEmptyElement);
+            return solveUnitRecursive;
         }
 
         private bool Solve(SudokuElement element)
         {
             var legalValues = GetLegalValuesForElement(element);
-            if (legalValues.Count() == 0) // There are no possible options.
+            if (!legalValues.Any()) // There are no possible options.
                 return false;
 
             foreach (var valueToTest in legalValues)
             {
                 element.Value = valueToTest;
 
-                var nextEmptyElement = Elements.FirstOrDefault(e => e.Value.Equals(EmptyValue));
+                var nextEmptyElement = _elements.FirstOrDefault(e => e.Value.Equals(EmptyValue));
                 if (nextEmptyElement == null) // If there are no empty elements, then we have solved the puzzle!
                     return true;
 
@@ -117,7 +116,7 @@ namespace Sudoku.Models
         private bool IsValidPuzzle()
         {
             var success = true;
-            foreach (var element in Elements)
+            foreach (var element in _elements)
             {
                 var canSet = IsValuePossible(element.Value, element.X, element.Y);
 
@@ -138,9 +137,9 @@ namespace Sudoku.Models
             var rowValues = GetRow(y);
             var regionValues = GetRegion(x, y);
 
-            var validColumn = columnValues.Where(e => e.Equals(value)).Count() <= 1;
-            var validRow = rowValues.Where(e => e.Equals(value)).Count() <= 1;
-            var validRegion = regionValues.Where(e => e.Equals(value)).Count() <= 1;
+            var validColumn = columnValues.Count(e => e.Equals(value)) <= 1;
+            var validRow = rowValues.Count(e => e.Equals(value)) <= 1;
+            var validRegion = regionValues.Count(e => e.Equals(value)) <= 1;
             var validValue = char.IsDigit(value) && !char.IsLetter(value) || value.Equals(EmptyValue);
 
             return validColumn && validRow && validRegion && validValue;
@@ -148,7 +147,7 @@ namespace Sudoku.Models
 
         public bool IsSolved()
         {
-            foreach (var element in Elements)
+            foreach (var element in _elements)
             {
                 if (element.Value.Equals(EmptyValue))
                     return false;
@@ -162,7 +161,7 @@ namespace Sudoku.Models
 
         public SudokuElement GetElement(int x, int y)
         {
-            return Elements.FirstOrDefault(e => e.X == x && e.Y == y);
+            return _elements.FirstOrDefault(e => e.X == x && e.Y == y);
         }
 
         public void SetElement(int x, int y, char value)
@@ -174,21 +173,21 @@ namespace Sudoku.Models
         public char[] GetRegion(int x, int y)
         {
             var element = GetElement(x, y);
-            return Elements.Where(e => e.Region == element.Region)
+            return _elements.Where(e => e.Region == element.Region)
                            .Select(e => e.Value)
                            .ToArray();
         }
 
-        public char[] GetColumn(int index)
+        public char[] GetColumn(int x)
         {
-            return Elements.Where(e => e.X == index)
+            return _elements.Where(e => e.X == x)
                            .Select(e => e.Value)
                            .ToArray();
         }
 
-        public char[] GetRow(int index)
+        public char[] GetRow(int y)
         {
-            return Elements.Where(e => e.Y == index)
+            return _elements.Where(e => e.Y == y)
                            .Select(e => e.Value)
                            .ToArray();
         }
@@ -196,16 +195,21 @@ namespace Sudoku.Models
         public override string ToString()
         {
             var builder = new StringBuilder();
-            for (int y = 0; y < Elements.Count(); y++)
+            for (int y = 0; y < _elements.Count; y++)
             {
                 var add = new string(GetRow(y));
-                if (y != Elements.Count() - 1)
+                if (y != _elements.Count - 1)
                     add += Environment.NewLine;
 
                 builder.Append(add);
             }
 
             return builder.ToString();
+        }
+
+        public static int GetRegionNumber(int x, int y)
+        {
+            return (x / 3) + (y / 3) * 3;
         }
     }
 }

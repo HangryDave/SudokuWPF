@@ -2,8 +2,6 @@
 using Sudoku.ViewModels;
 using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace Sudoku
 {
@@ -20,8 +18,7 @@ namespace Sudoku
 
         private void WriteItem_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Text file (*.txt)|*.txt";
+            var saveFileDialog = new SaveFileDialog { Filter = "Text file (*.txt)|*.txt" };
             if (saveFileDialog.ShowDialog() == true)
             {
                 File.WriteAllText(saveFileDialog.FileName, _viewModel.ToString());
@@ -30,16 +27,13 @@ namespace Sudoku
 
         private void OpenItem_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Text file (*.txt)|*.txt";
-            if(openFileDialog.ShowDialog() == true)
-            {
-                MessageBoxResult confirm = MessageBox.Show("Are you sure that you want to load a new puzzle?\nUnsaved changes will be overwritten.", "Open Puzzle", MessageBoxButton.YesNo);
-                if (confirm == MessageBoxResult.Yes)
-                {
-                    _viewModel.OpenPuzzle(File.ReadAllText(openFileDialog.FileName));
-                }
-            }
+            var openFileDialog = new OpenFileDialog { Filter = "Text file (*.txt)|*.txt" };
+            if (openFileDialog.ShowDialog() != true) // Because I'll forget, ShowDialog() is a nullable, so you have to compare it. If it's null or false, return.
+                return;
+            
+            var confirm = MessageBox.Show("Are you sure that you want to load a new puzzle?\nUnsaved changes will be overwritten.", "Open Puzzle", MessageBoxButton.YesNo);
+            if (confirm == MessageBoxResult.Yes)
+                _viewModel.OpenPuzzle(File.ReadAllText(openFileDialog.FileName));
         }
 
         private void ResetPuzzle_Click(object sender, RoutedEventArgs e)

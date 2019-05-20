@@ -1,10 +1,5 @@
 ﻿using Sudoku.Models;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sudoku.ViewModels
 {
@@ -54,13 +49,15 @@ namespace Sudoku.ViewModels
 
         public int X { get; }
         public int Y { get; }
+        public int Region { get; }
 
-        public ElementViewModel(string value, int x, int y, string color)
+        public ElementViewModel(char value, int x, int y, int region, string color)
         {
             Color = color;
-            Value = value;
+            Value = value.ToString();
             X = x;
             Y = y;
+            Region = region;
         }
 
         public char AsChar()

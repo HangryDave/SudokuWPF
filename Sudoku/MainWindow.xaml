@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sudoku"
-        xmlns:viewmodels="clr-namespace:Sudoku.ViewModels"
         mc:Ignorable="d"
         Title="Sudoku" Height="560" Width="470" MinHeight="560" MinWidth="470">
     
@@ -44,30 +43,30 @@
             </MenuItem>
         </Menu>
 
-        <local:Row x:Name="region_0" RowIndex="0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="9"/>
-        <local:Row x:Name="region_1" RowIndex="1" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="9"/>
-        <local:Row x:Name="region_2" RowIndex="2" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="9"/>
+        <local:Row x:Name="Region0" RowIndex="0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="9"/>
+        <local:Row x:Name="Region1" RowIndex="1" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="9"/>
+        <local:Row x:Name="Region2" RowIndex="2" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="9"/>
 
-        <local:Row x:Name="region_3" RowIndex="3" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="9"/>
-        <local:Row x:Name="region_4" RowIndex="4" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="9"/>
-        <local:Row x:Name="region_5" RowIndex="5" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="9"/>
-        <Border Grid.Row="4" Grid.RowSpan="3" BorderBrush="Black" BorderThickness="0 3 0 3" Grid.ColumnSpan="9"/>
+        <local:Row x:Name="Region3" RowIndex="3" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="9"/>
+        <local:Row x:Name="Region4" RowIndex="4" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="9"/>
+        <local:Row x:Name="Region5" RowIndex="5" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="9"/>
+        <Border Grid.Row="4" Grid.Column="0" Grid.RowSpan="3" BorderBrush="Black" BorderThickness="0 3 0 3" Grid.ColumnSpan="9"/>
 
-        <local:Row x:Name="region_6" RowIndex="6" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="9"/>
-        <local:Row x:Name="region_7" RowIndex="7" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="9"/>
-        <local:Row x:Name="region_8" RowIndex="8" Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="9"/>
+        <local:Row x:Name="Region6" RowIndex="6" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="9"/>
+        <local:Row x:Name="Region7" RowIndex="7" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="9"/>
+        <local:Row x:Name="Region8" RowIndex="8" Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="9"/>
 
-        <TextBlock x:Name="num_1" Visibility="{Binding ValidNumberVisibility}" Padding="5" VerticalAlignment="Stretch" Grid.Row="10" Grid.Column="0" FontSize="20" Text="1" Background="{Binding AllowedElementsColors[0]}" TextAlignment="Center"/>
-        <TextBlock x:Name="num_2" Visibility="{Binding ValidNumberVisibility}" Padding="5" VerticalAlignment="Stretch" Grid.Row="10" Grid.Column="1" FontSize="20" Text="2" Background="{Binding AllowedElementsColors[1]}" TextAlignment="Center"/>
-        <TextBlock x:Name="num_3" Visibility="{Binding ValidNumberVisibility}" Padding="5" VerticalAlignment="Stretch" Grid.Row="10" Grid.Column="2" FontSize="20" Text="3" Background="{Binding AllowedElementsColors[2]}" TextAlignment="Center"/>
-        <TextBlock x:Name="num_4" Visibility="{Binding ValidNumberVisibility}" Padding="5" VerticalAlignment="Stretch" Grid.Row="10" Grid.Column="3" FontSize="20" Text="4" Background="{Binding AllowedElementsColors[3]}" TextAlignment="Center"/>
-        <TextBlock x:Name="num_5" Visibility="{Binding ValidNumberVisibility}" Padding="5" VerticalAlignment="Stretch" Grid.Row="10" Grid.Column="4" FontSize="20" Text="5" Background="{Binding AllowedElementsColors[4]}" TextAlignment="Center"/>
-        <TextBlock x:Name="num_6" Visibility="{Binding ValidNumberVisibility}" Padding="5" VerticalAlignment="Stretch" Grid.Row="10" Grid.Column="5" FontSize="20" Text="6" Background="{Binding AllowedElementsColors[5]}" TextAlignment="Center"/>
-        <TextBlock x:Name="num_7" Visibility="{Binding ValidNumberVisibility}" Padding="5" VerticalAlignment="Stretch" Grid.Row="10" Grid.Column="6" FontSize="20" Text="7" Background="{Binding AllowedElementsColors[6]}" TextAlignment="Center"/>
-        <TextBlock x:Name="num_8" Visibility="{Binding ValidNumberVisibility}" Padding="5" VerticalAlignment="Stretch" Grid.Row="10" Grid.Column="7" FontSize="20" Text="8" Background="{Binding AllowedElementsColors[7]}" TextAlignment="Center"/>
-        <TextBlock x:Name="num_9" Visibility="{Binding ValidNumberVisibility}" Padding="5" VerticalAlignment="Stretch" Grid.Row="10" Grid.Column="8" FontSize="20" Text="9" Background="{Binding AllowedElementsColors[8]}" TextAlignment="Center"/>
-        <Border Grid.Row="10" Grid.ColumnSpan="9" BorderThickness="3 3 3 3" BorderBrush="Black"/>
+        <TextBlock x:Name="Num1" Visibility="{Binding ValidNumberVisibility}" Padding="5" VerticalAlignment="Stretch" Grid.Row="10" Grid.Column="0" FontSize="20" Text="1" Background="{Binding AllowedElementsColors[0]}" TextAlignment="Center"/>
+        <TextBlock x:Name="Num2" Visibility="{Binding ValidNumberVisibility}" Padding="5" VerticalAlignment="Stretch" Grid.Row="10" Grid.Column="1" FontSize="20" Text="2" Background="{Binding AllowedElementsColors[1]}" TextAlignment="Center"/>
+        <TextBlock x:Name="Num3" Visibility="{Binding ValidNumberVisibility}" Padding="5" VerticalAlignment="Stretch" Grid.Row="10" Grid.Column="2" FontSize="20" Text="3" Background="{Binding AllowedElementsColors[2]}" TextAlignment="Center"/>
+        <TextBlock x:Name="Num4" Visibility="{Binding ValidNumberVisibility}" Padding="5" VerticalAlignment="Stretch" Grid.Row="10" Grid.Column="3" FontSize="20" Text="4" Background="{Binding AllowedElementsColors[3]}" TextAlignment="Center"/>
+        <TextBlock x:Name="Num5" Visibility="{Binding ValidNumberVisibility}" Padding="5" VerticalAlignment="Stretch" Grid.Row="10" Grid.Column="4" FontSize="20" Text="5" Background="{Binding AllowedElementsColors[4]}" TextAlignment="Center"/>
+        <TextBlock x:Name="Num6" Visibility="{Binding ValidNumberVisibility}" Padding="5" VerticalAlignment="Stretch" Grid.Row="10" Grid.Column="5" FontSize="20" Text="6" Background="{Binding AllowedElementsColors[5]}" TextAlignment="Center"/>
+        <TextBlock x:Name="Num7" Visibility="{Binding ValidNumberVisibility}" Padding="5" VerticalAlignment="Stretch" Grid.Row="10" Grid.Column="6" FontSize="20" Text="7" Background="{Binding AllowedElementsColors[6]}" TextAlignment="Center"/>
+        <TextBlock x:Name="Num8" Visibility="{Binding ValidNumberVisibility}" Padding="5" VerticalAlignment="Stretch" Grid.Row="10" Grid.Column="7" FontSize="20" Text="8" Background="{Binding AllowedElementsColors[7]}" TextAlignment="Center"/>
+        <TextBlock x:Name="Num9" Visibility="{Binding ValidNumberVisibility}" Padding="5" VerticalAlignment="Stretch" Grid.Row="10" Grid.Column="8" FontSize="20" Text="9" Background="{Binding AllowedElementsColors[8]}" TextAlignment="Center"/>
+        <Border Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="9" BorderThickness="3 3 3 3" BorderBrush="Black"/>
 
-        <TextBlock x:Name="status" Padding="5" VerticalAlignment="Stretch" Grid.Row="11" Grid.ColumnSpan="9" FontSize="25" Text="{Binding Status}" TextAlignment="Center"/>
+        <TextBlock x:Name="Status" Padding="5" VerticalAlignment="Stretch" Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="9" FontSize="25" Text="{Binding Status}" TextAlignment="Center"/>
     </Grid>
 </Window>

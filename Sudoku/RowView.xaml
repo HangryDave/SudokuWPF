@@ -1,7 +1,6 @@
 ﻿<UserControl x:Class="Sudoku.Row"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:system="clr-namespace:System;assembly=mscorlib"
              Name="RowControl"
              Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ActualWidth}" Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ActualHeight}" HorizontalAlignment="Stretch">
 
@@ -21,18 +20,18 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <TextBox x:Name="element_0" Grid.Row="0" Grid.Column="0" MaxLength="1" FontSize="25" VerticalContentAlignment="Center" TextAlignment="Center" CommandManager.PreviewExecuted="TextBox_PreviewExecuted" PreviewMouseDown="TextBox_MouseDown" PreviewTextInput="TextBox_ValidateCharacter"/>
-        <TextBox x:Name="element_1" Grid.Row="0" Grid.Column="1" MaxLength="1" FontSize="25" VerticalContentAlignment="Center" TextAlignment="Center" CommandManager.PreviewExecuted="TextBox_PreviewExecuted" PreviewMouseDown="TextBox_MouseDown" PreviewTextInput="TextBox_ValidateCharacter"/>
-        <TextBox x:Name="element_2" Grid.Row="0" Grid.Column="2" MaxLength="1" FontSize="25" VerticalContentAlignment="Center" TextAlignment="Center" CommandManager.PreviewExecuted="TextBox_PreviewExecuted" PreviewMouseDown="TextBox_MouseDown" PreviewTextInput="TextBox_ValidateCharacter"/>
+        <TextBox x:Name="Element0" Grid.Row="0" Grid.Column="0" MaxLength="1" FontSize="25" VerticalContentAlignment="Center" TextAlignment="Center" CommandManager.PreviewExecuted="TextBox_PreviewExecuted" PreviewMouseDown="TextBox_MouseDown" PreviewTextInput="TextBox_ValidateCharacter"/>
+        <TextBox x:Name="Element1" Grid.Row="0" Grid.Column="1" MaxLength="1" FontSize="25" VerticalContentAlignment="Center" TextAlignment="Center" CommandManager.PreviewExecuted="TextBox_PreviewExecuted" PreviewMouseDown="TextBox_MouseDown" PreviewTextInput="TextBox_ValidateCharacter"/>
+        <TextBox x:Name="Element2" Grid.Row="0" Grid.Column="2" MaxLength="1" FontSize="25" VerticalContentAlignment="Center" TextAlignment="Center" CommandManager.PreviewExecuted="TextBox_PreviewExecuted" PreviewMouseDown="TextBox_MouseDown" PreviewTextInput="TextBox_ValidateCharacter"/>
         <Border Grid.Column="2" BorderBrush="Black" BorderThickness="0 0 4 0"/>
 
-        <TextBox x:Name="element_3" Grid.Row="0" Grid.Column="3" MaxLength="1" FontSize="25" VerticalContentAlignment="Center" TextAlignment="Center" CommandManager.PreviewExecuted="TextBox_PreviewExecuted" PreviewMouseDown="TextBox_MouseDown" PreviewTextInput="TextBox_ValidateCharacter"/>
-        <TextBox x:Name="element_4" Grid.Row="0" Grid.Column="4" MaxLength="1" FontSize="25" VerticalContentAlignment="Center" TextAlignment="Center" CommandManager.PreviewExecuted="TextBox_PreviewExecuted" PreviewMouseDown="TextBox_MouseDown" PreviewTextInput="TextBox_ValidateCharacter"/>
-        <TextBox x:Name="element_5" Grid.Row="0" Grid.Column="5" MaxLength="1" FontSize="25" VerticalContentAlignment="Center" TextAlignment="Center" CommandManager.PreviewExecuted="TextBox_PreviewExecuted" PreviewMouseDown="TextBox_MouseDown" PreviewTextInput="TextBox_ValidateCharacter"/>
+        <TextBox x:Name="Element3" Grid.Row="0" Grid.Column="3" MaxLength="1" FontSize="25" VerticalContentAlignment="Center" TextAlignment="Center" CommandManager.PreviewExecuted="TextBox_PreviewExecuted" PreviewMouseDown="TextBox_MouseDown" PreviewTextInput="TextBox_ValidateCharacter"/>
+        <TextBox x:Name="Element4" Grid.Row="0" Grid.Column="4" MaxLength="1" FontSize="25" VerticalContentAlignment="Center" TextAlignment="Center" CommandManager.PreviewExecuted="TextBox_PreviewExecuted" PreviewMouseDown="TextBox_MouseDown" PreviewTextInput="TextBox_ValidateCharacter"/>
+        <TextBox x:Name="Element5" Grid.Row="0" Grid.Column="5" MaxLength="1" FontSize="25" VerticalContentAlignment="Center" TextAlignment="Center" CommandManager.PreviewExecuted="TextBox_PreviewExecuted" PreviewMouseDown="TextBox_MouseDown" PreviewTextInput="TextBox_ValidateCharacter"/>
         <Border Grid.Column="5" BorderBrush="Black" BorderThickness="0 0 4 0"/>
 
-        <TextBox x:Name="element_6" Grid.Row="0" Grid.Column="6" MaxLength="1" FontSize="25" VerticalContentAlignment="Center" TextAlignment="Center" CommandManager.PreviewExecuted="TextBox_PreviewExecuted" PreviewMouseDown="TextBox_MouseDown" PreviewTextInput="TextBox_ValidateCharacter"/>
-        <TextBox x:Name="element_7" Grid.Row="0" Grid.Column="7" MaxLength="1" FontSize="25" VerticalContentAlignment="Center" TextAlignment="Center" CommandManager.PreviewExecuted="TextBox_PreviewExecuted" PreviewMouseDown="TextBox_MouseDown" PreviewTextInput="TextBox_ValidateCharacter"/>
-        <TextBox x:Name="element_8" Grid.Row="0" Grid.Column="8" MaxLength="1" FontSize="25" VerticalContentAlignment="Center" TextAlignment="Center" CommandManager.PreviewExecuted="TextBox_PreviewExecuted" PreviewMouseDown="TextBox_MouseDown" PreviewTextInput="TextBox_ValidateCharacter"/>
+        <TextBox x:Name="Element6" Grid.Row="0" Grid.Column="6" MaxLength="1" FontSize="25" VerticalContentAlignment="Center" TextAlignment="Center" CommandManager.PreviewExecuted="TextBox_PreviewExecuted" PreviewMouseDown="TextBox_MouseDown" PreviewTextInput="TextBox_ValidateCharacter"/>
+        <TextBox x:Name="Element7" Grid.Row="0" Grid.Column="7" MaxLength="1" FontSize="25" VerticalContentAlignment="Center" TextAlignment="Center" CommandManager.PreviewExecuted="TextBox_PreviewExecuted" PreviewMouseDown="TextBox_MouseDown" PreviewTextInput="TextBox_ValidateCharacter"/>
+        <TextBox x:Name="Element8" Grid.Row="0" Grid.Column="8" MaxLength="1" FontSize="25" VerticalContentAlignment="Center" TextAlignment="Center" CommandManager.PreviewExecuted="TextBox_PreviewExecuted" PreviewMouseDown="TextBox_MouseDown" PreviewTextInput="TextBox_ValidateCharacter"/>
     </Grid>
 </UserControl>
