@@ -27,36 +27,7 @@ namespace Sudoku.Models
         private List<SudokuElement> Parse(string grid)
         {
             var result = new List<SudokuElement>();
-            var rows = new string[9];
-
-            if (grid != null)
-            {
-                var fixedGrid = grid.Replace(" ", "");
-                var reader = new StringReader(fixedGrid);
-
-                int y = 0;
-                var line = reader.ReadLine();
-                while (line != null)
-                {
-                    if (line.Length > 0)
-                    {
-                        if (y != 0)
-                            rows[y] = line + '\n';
-                        else
-                            rows[y] = line;
-
-                        y++;
-                    }
-
-                    line = reader.ReadLine();
-                }
-                reader.Close();
-            }
-            else
-            {
-                // There is no predefined puzzle, so just create an empty set of rows.
-                rows = new string[9].Select(s => new String(EmptyValue, 9)).ToArray();
-            }
+            var rows = GetRows();
 
             for (int y = 0; y < 9; y++)
             {
@@ -70,6 +41,36 @@ namespace Sudoku.Models
             }
 
             return result;
+            
+            string[] GetRows()
+            {
+                if (string.IsNullOrEmpty(grid))
+                    return new string[9].Select(s => new String(EmptyValue, 9)).ToArray();
+            
+                var gridRows = new string[9];
+                var fixedGrid = grid.Trim().Replace(" ", "");
+                var reader = new StringReader(fixedGrid);
+
+                var y = 0;
+                var line = reader.ReadLine();
+                while (line != null)
+                {
+                    if (line.Length > 0)
+                    {
+                        if (y != 0)
+                            line += '\n';
+
+                        gridRows[y] = line;
+
+                        y++;
+                    }
+
+                    line = reader.ReadLine();
+                }
+                reader.Close();
+
+                return gridRows;
+            }
         }
 
         public bool Solve()

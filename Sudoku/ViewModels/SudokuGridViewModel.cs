@@ -38,6 +38,10 @@ namespace Sudoku.ViewModels
             }
         }
 
+        private const string InvalidStatus = "Invalid puzzle.";
+        private const string InProgressStatus = "In progress.";
+        private const string SolvedStatus = "Solved.";
+
         private const string ValidColor = "White";
         private const string InvalidColor = "Salmon";
         private const string SelectedColor = "Yellow";
@@ -45,7 +49,7 @@ namespace Sudoku.ViewModels
         private const string LockedColor = "LightGray";
         
         public ObservableCollection<string> AllowedElementsColors { get; }
-
+        
         private bool _isValidPuzzle = true;
         private bool _isPuzzleLoaded = false;
         private int _selectedX = -1;
@@ -86,7 +90,7 @@ namespace Sudoku.ViewModels
         {
             var success = _grid.Solve();
             if (!success)
-                Status = "Invalid puzzle.";
+                Status = InvalidStatus;
             
             var allElementViewModels = Elements.SelectMany(e => e);
             foreach (var elementViewModel in allElementViewModels)
@@ -102,12 +106,12 @@ namespace Sudoku.ViewModels
 
             _isPuzzleLoaded = false;
 
-            Status = _isValidPuzzle ? "In progress." : "Invalid puzzle!";
+            Status = _isValidPuzzle ? InProgressStatus : InvalidStatus;
             ValidNumberVisibility = "Hidden";
 
             Initialize();
 
-            Status = _grid.IsSolved() ? "Solved!" : Status;
+            Status = _grid.IsSolved() ? SolvedStatus : Status;
 
             _isPuzzleLoaded = true;
             if (_isValidPuzzle)
@@ -181,7 +185,7 @@ namespace Sudoku.ViewModels
             UpdateElementColors();
             UpdateAllowedNumbers(x, y);
 
-            Status = _grid.IsSolved() ? "Solved!" : "In progress.";
+            Status = _grid.IsSolved() ? SolvedStatus : InProgressStatus;
         }
 
         private bool IsElementValid(ElementViewModel element)
