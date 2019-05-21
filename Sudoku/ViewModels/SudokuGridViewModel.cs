@@ -103,17 +103,14 @@ namespace Sudoku.ViewModels
         public void OpenPuzzle(string data)
         {
             _isValidPuzzle = _grid.OpenPuzzle(data);
-
-            _isPuzzleLoaded = false;
-
-            Status = _isValidPuzzle ? InProgressStatus : InvalidStatus;
+            _isPuzzleLoaded = data != null;
+            
             ValidNumberVisibility = "Hidden";
 
             Initialize();
 
             Status = _grid.IsSolved() ? SolvedStatus : Status;
-
-            _isPuzzleLoaded = true;
+            
             if (_isValidPuzzle)
             {
                 _selectedX = -1;
@@ -195,17 +192,17 @@ namespace Sudoku.ViewModels
 
         public void SelectElement(int x, int y, int region)
         {
-            if (_isValidPuzzle)
-            {
-                ValidNumberVisibility = "Visible";
+            if (!_isValidPuzzle)
+                return;
+            
+            ValidNumberVisibility = "Visible";
 
-                _selectedX = x;
-                _selectedY = y;
-                _selectedRegion = region;
+            _selectedX = x;
+            _selectedY = y;
+            _selectedRegion = region;
 
-                UpdateElementColors();
-                UpdateAllowedNumbers(x, y);
-            }
+            UpdateElementColors();
+            UpdateAllowedNumbers(x, y);
         }
 
         private void UpdateElementColors()
